@@ -29,7 +29,7 @@ The demo is the same every time you run it.
 
 | Requirement | Notes |
 |---|---|
-| Python 3.9+ | Verified locally on 3.9 and 3.13; the CI workflow matrix runs 3.9 and 3.12 |
+| Python 3.10+ | Verified locally on 3.13; CI runs 3.12 and 3.13 on GitHub Actions |
 | `pytest` | The only third-party package. The app and pipeline use only the standard library |
 | OS | Linux, macOS or Windows. The output is plain ASCII. Colour switches off automatically when piped (`NO_COLOR=1` turns it off, `FORCE_COLOR=1` forces it on) |
 

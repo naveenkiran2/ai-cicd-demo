@@ -179,8 +179,8 @@ def stage_checkout(ctx: RunContext, log: StageLog) -> StageOutcome:
         log.output(diff)
 
     problems = []
-    if sys.version_info < (3, 9):
-        problems.append(f"python >= 3.9 required, found {platform.python_version()}")
+    if sys.version_info < (3, 10):
+        problems.append(f"python >= 3.10 required, found {platform.python_version()}")
     for required in ("app/__init__.py", "tests/unit", "tests/integration", "config/deploy.json", "requirements.txt"):
         if not (ctx.workspace / required).exists():
             problems.append(f"missing required path: {required}")

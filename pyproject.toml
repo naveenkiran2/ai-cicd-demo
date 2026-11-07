@@ -2,7 +2,7 @@
 name = "order-service"
 version = "1.4.0"
 description = "Sample order service used by the ai-cicd-demo AI-assisted CI/CD pipeline"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = []
 
 [project.optional-dependencies]
