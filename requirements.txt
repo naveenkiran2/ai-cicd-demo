@@ -1,0 +1,5 @@
+# Runtime: the app and pipeline use only the Python standard library.
+# Test tooling:
+pytest>=7.0,<10
+# Optional (only if you enable the Claude narrative adapter):
+#   anthropic>=0.40

@@ -1,0 +1,49 @@
+{
+  "run_id": "20261107-203927-failure",
+  "created_at": "2026-11-07T20:39:28.162Z",
+  "title": "Percentage not normalised in apply_discount() (app/pricing.py:23)",
+  "playbook": "PB-001 percentage-scale-error",
+  "confidence": 0.95,
+  "changes": [
+    {
+      "path": "app/pricing.py",
+      "line": 23,
+      "old": "    return to_money(subtotal * discount_pct)",
+      "new": "    return to_money(subtotal * (discount_pct / HUNDRED))",
+      "reason": "normalise 0-100 percentage in apply_discount()",
+      "sha256_before": "5390a7d26812cb3e2cd2418d30d88981a34698d7d930b202180a6f6d36349863"
+    }
+  ],
+  "targeted_validation": [
+    "lint",
+    "unit_tests"
+  ],
+  "validation_plan": [
+    "Safety gate: allow-list, file-hash precondition, change-size limit, syntax check of app/pricing.py",
+    "Targeted rerun: Lint, static & secret checks, Unit tests",
+    "Full pipeline rerun (all 7 stages) on the patched workspace",
+    "Success is declared only if the full rerun status is SUCCESS"
+  ],
+  "rollback_plan": [
+    "Automatic: if targeted or full validation fails, restore the byte-for-byte backups and log it",
+    "Manual: python -m ai_bot.remediate --run-id 20261107-203927-failure --rollback",
+    "Source control: the patch is saved as a .diff; revert it like any commit"
+  ],
+  "safety_policy": {
+    "allowed": [
+      "app/*.py",
+      "config/*.json"
+    ],
+    "denied": [
+      "tests/*",
+      "pipeline/*",
+      "ai_bot/*",
+      ".github/*",
+      "requirements*.txt",
+      "pyproject.toml",
+      "*.lock"
+    ],
+    "max_files": 2,
+    "max_changed_lines": 5
+  }
+}

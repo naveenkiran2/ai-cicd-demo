@@ -1,0 +1,209 @@
+{
+  "run_id": "20261107-203929-partial",
+  "scenario": "partial",
+  "created_at": "2026-11-07T20:39:29.362Z",
+  "pipeline": "order-service-ci",
+  "status": "FAILED",
+  "outcome": "partial_success",
+  "failed_stage": "integration",
+  "trigger": "manual",
+  "parent_run_id": null,
+  "commit": {
+    "message": "OPS-87: align readiness probe with k8s naming convention",
+    "author": "dev.carol",
+    "branch": "ops/probe-naming",
+    "sha": "b2a70e30b7eb"
+  },
+  "environment": {
+    "python": "3.13.18",
+    "platform": "Linux-6.18.44-fc-v310-x86_64-with-glibc2.39",
+    "executor": "local"
+  },
+  "stages": [
+    {
+      "key": "checkout",
+      "name": "Checkout & environment validation",
+      "order": 1,
+      "status": "PASS",
+      "summary": "tree b2a70e30b7eb, 18 files, python 3.13.18",
+      "started_at": "2026-11-07T20:39:29.364Z",
+      "finished_at": "2026-11-07T20:39:29.368Z",
+      "duration_s": 0.003,
+      "log_file": "logs/01_checkout.log",
+      "reports": [],
+      "metrics": {
+        "tree_sha": "b2a70e30b7eb",
+        "files": 18,
+        "python": "3.13.18"
+      },
+      "error": null
+    },
+    {
+      "key": "dependencies",
+      "name": "Dependency installation",
+      "order": 2,
+      "status": "PASS",
+      "summary": "1/1 resolved; app runtime uses stdlib only",
+      "started_at": "2026-11-07T20:39:29.368Z",
+      "finished_at": "2026-11-07T20:39:29.370Z",
+      "duration_s": 0.002,
+      "log_file": "logs/02_dependencies.log",
+      "reports": [],
+      "metrics": {
+        "declared": 1,
+        "resolved": {
+          "pytest": "9.2.0"
+        },
+        "missing": [],
+        "unbounded": []
+      },
+      "error": null
+    },
+    {
+      "key": "lint",
+      "name": "Lint, static & secret checks",
+      "order": 3,
+      "status": "PASS",
+      "summary": "15 files, 0 errors, 0 secrets",
+      "started_at": "2026-11-07T20:39:29.370Z",
+      "finished_at": "2026-11-07T20:39:29.379Z",
+      "duration_s": 0.009,
+      "log_file": "logs/03_lint.log",
+      "reports": [
+        "test-reports/lint.json"
+      ],
+      "metrics": {
+        "python_files": 15,
+        "files_secret_scanned": 18,
+        "errors": 0,
+        "warnings": 0,
+        "secret_findings": 0,
+        "checks": [
+          "syntax",
+          "unused-import",
+          "bare-except",
+          "no-print",
+          "line-length",
+          "whitespace",
+          "secrets"
+        ]
+      },
+      "error": null
+    },
+    {
+      "key": "unit_tests",
+      "name": "Unit tests",
+      "order": 4,
+      "status": "PASS",
+      "summary": "21 passed",
+      "started_at": "2026-11-07T20:39:29.379Z",
+      "finished_at": "2026-11-07T20:39:29.643Z",
+      "duration_s": 0.264,
+      "log_file": "logs/04_unit_tests.log",
+      "reports": [
+        "test-reports/junit-unit.xml",
+        "test-reports/unit-summary.json"
+      ],
+      "metrics": {
+        "tests": 21,
+        "passed": 21,
+        "failed": 0,
+        "skipped": 0,
+        "test_time_s": 0.03,
+        "suites": [
+          "tests.unit.test_config",
+          "tests.unit.test_orders",
+          "tests.unit.test_pricing"
+        ]
+      },
+      "error": null
+    },
+    {
+      "key": "package",
+      "name": "Build & package artifact",
+      "order": 5,
+      "status": "PASS",
+      "summary": "order-service-1.4.0.tar.gz sha256:115f03b21c61",
+      "started_at": "2026-11-07T20:39:29.643Z",
+      "finished_at": "2026-11-07T20:39:29.645Z",
+      "duration_s": 0.002,
+      "log_file": "logs/05_package.log",
+      "reports": [
+        "artifacts/manifest.json"
+      ],
+      "metrics": {
+        "artifact": "artifacts/order-service-1.4.0.tar.gz",
+        "sha256": "115f03b21c616aad8dc4ed9db5846d2de07bfd4215c15b3d161bde56b3eb2739",
+        "size_bytes": 3075,
+        "files": 5,
+        "version": "1.4.0"
+      },
+      "error": null
+    },
+    {
+      "key": "integration",
+      "name": "Integration & deployment validation",
+      "order": 6,
+      "status": "FAIL",
+      "summary": "probe /healthz -> 404; 1 failed, 5 passed",
+      "started_at": "2026-11-07T20:39:29.645Z",
+      "finished_at": "2026-11-07T20:39:30.032Z",
+      "duration_s": 0.387,
+      "log_file": "logs/06_integration.log",
+      "reports": [
+        "test-reports/junit-integration.xml",
+        "test-reports/integration-summary.json",
+        "logs/service.log"
+      ],
+      "metrics": {
+        "tests": 6,
+        "passed": 5,
+        "failed": 1,
+        "skipped": 0,
+        "test_time_s": 0.041,
+        "suites": [
+          "tests.integration.test_deployment_readiness",
+          "tests.integration.test_health_contract",
+          "tests.integration.test_order_api"
+        ],
+        "readiness_probe": {
+          "path": "/healthz",
+          "http_status": 404,
+          "passed": false
+        },
+        "environment": "staging"
+      },
+      "error": "failing tests: test_readiness_probe_path_is_served"
+    },
+    {
+      "key": "publish",
+      "name": "Publish pipeline report",
+      "order": 7,
+      "status": "PASS",
+      "summary": "2 reports published",
+      "started_at": "2026-11-07T20:39:30.032Z",
+      "finished_at": "2026-11-07T20:39:30.032Z",
+      "duration_s": 0.0,
+      "log_file": "logs/07_publish.log",
+      "reports": [],
+      "metrics": {
+        "published": [
+          "run.json",
+          "summary.md"
+        ]
+      },
+      "error": null
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "artifacts/order-service-1.4.0.tar.gz",
+      "sha256": "115f03b21c616aad8dc4ed9db5846d2de07bfd4215c15b3d161bde56b3eb2739",
+      "size_bytes": 3075,
+      "version": "1.4.0",
+      "files": 5
+    }
+  ],
+  "duration_s": 0.669,
+  "finished_at": "2026-11-07T20:39:30.032Z"
+}

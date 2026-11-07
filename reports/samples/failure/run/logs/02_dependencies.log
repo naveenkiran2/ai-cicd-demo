@@ -1,0 +1,5 @@
+2026-11-07T20:39:27.763Z [INFO] stage dependencies: resolve declared dependencies against version constraints
+2026-11-07T20:39:27.763Z [INFO] declared requirements: pytest>=7.0,<10
+2026-11-07T20:39:27.764Z [INFO] resolved pytest==9.2.0 satisfies '>=7.0,<10'
+2026-11-07T20:39:27.764Z [INFO] app runtime uses stdlib only
+2026-11-07T20:39:27.764Z [INFO] stage dependencies finished: PASS in 0.002s

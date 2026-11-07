@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "syntax",
+    "unused-import",
+    "bare-except",
+    "no-print",
+    "line-length",
+    "whitespace",
+    "secrets"
+  ],
+  "python_files": 15,
+  "files_secret_scanned": 18,
+  "errors": 0,
+  "warnings": 0,
+  "secret_findings": 0,
+  "findings": []
+}

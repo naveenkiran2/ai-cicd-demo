@@ -1,0 +1,18 @@
+2026-11-07T20:39:29.364Z [INFO] stage checkout: snapshot the commit and verify interpreter + repository layout
+2026-11-07T20:39:29.364Z [INFO] checkout: repository baseline -> workspace
+2026-11-07T20:39:29.366Z [INFO] applied commit change to config/deploy.json
+2026-11-07T20:39:29.367Z [INFO] source tree digest: b2a70e30b7eb
+2026-11-07T20:39:29.367Z [INFO] commit diff:
+    | --- a/config/deploy.json
+    | +++ b/config/deploy.json
+    | @@ -2,7 +2,7 @@
+    |    "service": "order-service",
+    |    "environment": "staging",
+    |    "port": 8080,
+    | -  "health_path": "/health",
+    | +  "health_path": "/healthz",
+    |    "replicas": 2,
+    |    "readiness_timeout_seconds": 5
+    |  }
+2026-11-07T20:39:29.367Z [INFO] python 3.13.18 on Linux x86_64
+2026-11-07T20:39:29.368Z [INFO] stage checkout finished: PASS in 0.003s

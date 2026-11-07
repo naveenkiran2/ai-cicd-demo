@@ -1,0 +1,67 @@
+[
+  {
+    "check": "human-approval",
+    "passed": true,
+    "detail": "explicit --approve given"
+  },
+  {
+    "check": "playbook-auto-remediable",
+    "passed": true,
+    "detail": "playbook PB-001 percentage-scale-error permits auto-fix"
+  },
+  {
+    "check": "confidence-threshold",
+    "passed": true,
+    "detail": "95% >= 80%"
+  },
+  {
+    "check": "change-scope",
+    "passed": true,
+    "detail": "1 file(s), limits 2 files / 5 lines"
+  },
+  {
+    "check": "workspace-in-project",
+    "passed": true,
+    "detail": "workspace artifacts/runs/20261107-203927-failure/workspace"
+  },
+  {
+    "check": "no-production-target",
+    "passed": true,
+    "detail": "target environment: local"
+  },
+  {
+    "check": "path-inside-workspace:app/pricing.py",
+    "passed": true,
+    "detail": "app/pricing.py"
+  },
+  {
+    "check": "path-allow-listed:app/pricing.py",
+    "passed": true,
+    "detail": "allowed=('app/*.py', 'config/*.json')"
+  },
+  {
+    "check": "no-symlink:app/pricing.py",
+    "passed": true,
+    "detail": "regular existing file"
+  },
+  {
+    "check": "unchanged-since-diagnosis:app/pricing.py",
+    "passed": true,
+    "detail": "sha256 5390a7d26812"
+  },
+  {
+    "check": "exact-single-match:app/pricing.py",
+    "passed": true,
+    "detail": "old text found 1x"
+  },
+  {
+    "check": "syntax-valid-after:app/pricing.py",
+    "passed": true,
+    "detail": "patched file parses"
+  },
+  {
+    "check": "no-secret-introduced:app/pricing.py",
+    "passed": true,
+    "detail": "clean"
+  }
+]

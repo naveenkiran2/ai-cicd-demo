@@ -1,0 +1,210 @@
+{
+  "run_id": "20261107-203929-partial",
+  "scenario": "partial",
+  "pipeline": "order-service-ci",
+  "analyzer": "ai-cicd-bot rule-engine v1.0 (deterministic)",
+  "generated_at": "2026-11-07T20:39:30.033Z",
+  "status": "FAILED",
+  "outcome": "partial_success",
+  "failed_stage": "integration",
+  "commit": {
+    "message": "OPS-87: align readiness probe with k8s naming convention",
+    "author": "dev.carol",
+    "branch": "ops/probe-naming",
+    "sha": "b2a70e30b7eb"
+  },
+  "duration_s": 0.669,
+  "stages": [
+    {
+      "order": 1,
+      "key": "checkout",
+      "name": "Checkout & environment validation",
+      "status": "PASS",
+      "duration_s": 0.003,
+      "summary": "tree b2a70e30b7eb, 18 files, python 3.13.18"
+    },
+    {
+      "order": 2,
+      "key": "dependencies",
+      "name": "Dependency installation",
+      "status": "PASS",
+      "duration_s": 0.002,
+      "summary": "1/1 resolved; app runtime uses stdlib only"
+    },
+    {
+      "order": 3,
+      "key": "lint",
+      "name": "Lint, static & secret checks",
+      "status": "PASS",
+      "duration_s": 0.009,
+      "summary": "15 files, 0 errors, 0 secrets"
+    },
+    {
+      "order": 4,
+      "key": "unit_tests",
+      "name": "Unit tests",
+      "status": "PASS",
+      "duration_s": 0.264,
+      "summary": "21 passed"
+    },
+    {
+      "order": 5,
+      "key": "package",
+      "name": "Build & package artifact",
+      "status": "PASS",
+      "duration_s": 0.002,
+      "summary": "order-service-1.4.0.tar.gz sha256:115f03b21c61"
+    },
+    {
+      "order": 6,
+      "key": "integration",
+      "name": "Integration & deployment validation",
+      "status": "FAIL",
+      "duration_s": 0.387,
+      "summary": "probe /healthz -> 404; 1 failed, 5 passed"
+    },
+    {
+      "order": 7,
+      "key": "publish",
+      "name": "Publish pipeline report",
+      "status": "PASS",
+      "duration_s": 0.0,
+      "summary": "2 reports published"
+    }
+  ],
+  "passed_work": [
+    "Checkout & environment validation",
+    "Dependency installation",
+    "Lint, static & secret checks",
+    "Unit tests",
+    "Build & package artifact",
+    "Publish pipeline report"
+  ],
+  "failed_work": [
+    "Integration & deployment validation"
+  ],
+  "skipped_work": [],
+  "title": "Readiness probe path /healthz not served (service exposes /health)",
+  "executive_summary": "Run 20261107-203929-partial PARTIAL SUCCESS: 'Integration & deployment validation' failed (probe /healthz -> 404; 1 failed, 5 passed). Root cause (95% confidence): Readiness probe path /healthz not served (service exposes /health). 5 earlier stages passed and their outputs are reusable (artifact artifacts/order-service-1.4.0.tar.gz (sha256 115f03b21c61)). Production impact: None. Failure was caught in isolated local staging validation. A minimal fix is proposed and awaits human approval.",
+  "failure_class": "deployment_config_drift / readiness_probe_mismatch",
+  "playbook": "PB-002 readiness-probe-path-mismatch",
+  "failed_stage_detail": {
+    "key": "integration",
+    "name": "Integration & deployment validation",
+    "summary": "probe /healthz -> 404; 1 failed, 5 passed",
+    "error": "failing tests: test_readiness_probe_path_is_served",
+    "log_file": "logs/06_integration.log"
+  },
+  "reusable_outputs": [
+    "artifact artifacts/order-service-1.4.0.tar.gz (sha256 115f03b21c61)"
+  ],
+  "root_cause": "The latest commit changed health_path in config/deploy.json from /health to /healthz. The service (app/service.py) only serves /health, so the platform's readiness probe gets HTTP 404 and the deployment can never become ready. Application code and the artifact are healthy: all other integration and contract tests pass.",
+  "evidence": [
+    {
+      "source": "logs/06_integration.log:8",
+      "finding": "readiness probe returned 404 for the manifest's health_path",
+      "excerpt": "readiness probe FAILED: GET /healthz -> HTTP 404"
+    },
+    {
+      "source": "workspace:config/deploy.json:5",
+      "finding": "manifest declares health_path /healthz",
+      "excerpt": "\"health_path\": \"/healthz\","
+    },
+    {
+      "source": "workspace:app/service.py:30",
+      "finding": "service only serves GET routes: ['/health']",
+      "excerpt": "GET_ROUTES keys = ['/health']"
+    },
+    {
+      "source": "test-reports/junit-integration.xml",
+      "finding": "test_readiness_probe_path_is_served failed",
+      "excerpt": "AssertionError: readiness probe GET /healthz returned HTTP 404"
+    },
+    {
+      "source": "test-reports/junit-integration.xml",
+      "finding": "service itself is healthy: 5 integration tests passed, including the /health health contract",
+      "excerpt": "test_manifest_targets_this_service, test_health_contract_fields, test_unknown_route_returns_404, test_quote_end_to_end, test_invalid_order_returns_400"
+    },
+    {
+      "source": "commit.diff",
+      "finding": "config/deploy.json line 5 changed in the failing commit",
+      "excerpt": "-  \"health_path\": \"/health\",\n+  \"health_path\": \"/healthz\","
+    },
+    {
+      "source": "logs/05_package.log",
+      "finding": "artifact built and checksummed before the failure - reusable",
+      "excerpt": "sha256:115f03b21c616aad8dc4ed9db5846d2de07bfd4215c15b3d161bde56b3eb2739"
+    }
+  ],
+  "impact": {
+    "severity": "MEDIUM",
+    "area": "deployment configuration",
+    "blast_radius": [
+      "config/deploy.json (environment config, not packaged in the artifact)",
+      "platform readiness probe and rollout gating for order-service",
+      "no application code affected; artifact sha256 unchanged"
+    ],
+    "customer_impact": "If promoted, pods would never pass readiness: rollout stalls or restart-loops and capacity drops during deploy.",
+    "production_impact": "None. Failure was caught in isolated local staging validation.",
+    "release_blocked": true
+  },
+  "recommendation": "Point the manifest back at the served route: set health_path to /health in config/deploy.json. Config-only, one line, no rebuild needed.",
+  "fix_guide": [
+    "Open config/deploy.json line 5.",
+    "Replace:  \"health_path\": \"/healthz\",",
+    "With:     \"health_path\": \"/health\",",
+    "Re-run ONLY the integration & deployment-validation stage against the existing artifact.",
+    "If it passes, re-run the full pipeline for a clean, auditable green build.",
+    "If /healthz is a genuine platform convention, raise a separate change to add the route in app/service.py together with contract tests - do not mix that into this fix."
+  ],
+  "alternatives_considered": [
+    "Add a /healthz route to the service - rejected for auto-fix: code change, needs rebuild and a contract decision; broader than necessary."
+  ],
+  "proposed_changes": [
+    {
+      "path": "config/deploy.json",
+      "line": 5,
+      "old": "  \"health_path\": \"/healthz\",",
+      "new": "  \"health_path\": \"/health\",",
+      "reason": "align readiness probe with served route",
+      "sha256_before": "5d52e51d0014bf2632e2df971991df21373f9e27e031f70729ed67cf95f6d69f"
+    }
+  ],
+  "targeted_validation": [
+    "integration"
+  ],
+  "validation_plan": [
+    "Safety gate: allow-list, file-hash precondition, change-size limit, syntax check of config/deploy.json",
+    "Targeted rerun: Integration & deployment validation (reusing the already-built artifact)",
+    "Full pipeline rerun (all 7 stages) on the patched workspace",
+    "Success is declared only if the full rerun status is SUCCESS"
+  ],
+  "rollback_plan": [
+    "Automatic: if targeted or full validation fails, restore the byte-for-byte backups and log it",
+    "Manual: python -m ai_bot.remediate --run-id 20261107-203929-partial --rollback",
+    "Source control: the patch is saved as a .diff; revert it like any commit"
+  ],
+  "confidence": 0.95,
+  "confidence_factors": [
+    {
+      "signal": "probe path absent from service routes with a close match present",
+      "weight": 0.6
+    },
+    {
+      "signal": "404 (not 5xx/timeout) - service is up, path is wrong",
+      "weight": 0.15
+    },
+    {
+      "signal": "manifest line changed by the latest commit",
+      "weight": 0.15
+    },
+    {
+      "signal": "health contract passes on /health",
+      "weight": 0.05
+    }
+  ],
+  "auto_remediable": true,
+  "escalation_reason": null,
+  "decision": "PROPOSE_FIX_PENDING_APPROVAL",
+  "narrator": "rule-based"
+}

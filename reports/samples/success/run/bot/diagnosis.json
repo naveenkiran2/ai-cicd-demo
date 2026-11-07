@@ -1,0 +1,287 @@
+{
+  "run_id": "20261107-203926-success",
+  "scenario": "success",
+  "pipeline": "order-service-ci",
+  "analyzer": "ai-cicd-bot rule-engine v1.0 (deterministic)",
+  "generated_at": "2026-11-07T20:39:27.648Z",
+  "status": "SUCCESS",
+  "outcome": "success",
+  "failed_stage": null,
+  "commit": {
+    "message": "DOCS-12: clarify pricing docstring",
+    "author": "dev.alice",
+    "branch": "feature/docs-pricing",
+    "sha": "37108b64f976"
+  },
+  "duration_s": 0.755,
+  "stages": [
+    {
+      "order": 1,
+      "key": "checkout",
+      "name": "Checkout & environment validation",
+      "status": "PASS",
+      "duration_s": 0.004,
+      "summary": "tree 37108b64f976, 18 files, python 3.13.18"
+    },
+    {
+      "order": 2,
+      "key": "dependencies",
+      "name": "Dependency installation",
+      "status": "PASS",
+      "duration_s": 0.002,
+      "summary": "1/1 resolved; app runtime uses stdlib only"
+    },
+    {
+      "order": 3,
+      "key": "lint",
+      "name": "Lint, static & secret checks",
+      "status": "PASS",
+      "duration_s": 0.011,
+      "summary": "15 files, 0 errors, 0 secrets"
+    },
+    {
+      "order": 4,
+      "key": "unit_tests",
+      "name": "Unit tests",
+      "status": "PASS",
+      "duration_s": 0.308,
+      "summary": "21 passed"
+    },
+    {
+      "order": 5,
+      "key": "package",
+      "name": "Build & package artifact",
+      "status": "PASS",
+      "duration_s": 0.002,
+      "summary": "order-service-1.4.0.tar.gz sha256:ab613bd964a9"
+    },
+    {
+      "order": 6,
+      "key": "integration",
+      "name": "Integration & deployment validation",
+      "status": "PASS",
+      "duration_s": 0.426,
+      "summary": "6 passed"
+    },
+    {
+      "order": 7,
+      "key": "publish",
+      "name": "Publish pipeline report",
+      "status": "PASS",
+      "duration_s": 0.001,
+      "summary": "2 reports published"
+    }
+  ],
+  "passed_work": [
+    "Checkout & environment validation",
+    "Dependency installation",
+    "Lint, static & secret checks",
+    "Unit tests",
+    "Build & package artifact",
+    "Integration & deployment validation",
+    "Publish pipeline report"
+  ],
+  "failed_work": [],
+  "skipped_work": [],
+  "title": "Healthy run - release candidate verified",
+  "executive_summary": "Run 20261107-203926-success PASSED all 7 stages in 0.76s for commit 'DOCS-12: clarify pricing docstring'. 27 automated tests passed (0 failed), static analysis and secret scanning were clean, and a checksummed artifact (order-service-1.4.0.tar.gz) was built and validated in an isolated staging deployment. Conclusion: READY for promotion through the normal change-approval gate.",
+  "pipeline_purpose": "Continuously verify, package and deployment-validate the order-service so that every commit produces a tested, versioned, traceable artifact that is safe to promote.",
+  "stage_explanations": [
+    {
+      "stage": "Checkout & environment validation",
+      "status": "PASS",
+      "duration_s": 0.004,
+      "what_it_did": "snapshot the commit and verify interpreter + repository layout",
+      "result": "tree 37108b64f976, 18 files, python 3.13.18"
+    },
+    {
+      "stage": "Dependency installation",
+      "status": "PASS",
+      "duration_s": 0.002,
+      "what_it_did": "resolve declared dependencies against version constraints",
+      "result": "1/1 resolved; app runtime uses stdlib only"
+    },
+    {
+      "stage": "Lint, static & secret checks",
+      "status": "PASS",
+      "duration_s": 0.011,
+      "what_it_did": "static analysis, style rules and hard-coded secret scan",
+      "result": "15 files, 0 errors, 0 secrets"
+    },
+    {
+      "stage": "Unit tests",
+      "status": "PASS",
+      "duration_s": 0.308,
+      "what_it_did": "verify domain logic in isolation",
+      "result": "21 passed"
+    },
+    {
+      "stage": "Build & package artifact",
+      "status": "PASS",
+      "duration_s": 0.002,
+      "what_it_did": "validate version metadata and build a reproducible, checksummed artifact",
+      "result": "order-service-1.4.0.tar.gz sha256:ab613bd964a9"
+    },
+    {
+      "stage": "Integration & deployment validation",
+      "status": "PASS",
+      "duration_s": 0.426,
+      "what_it_did": "deploy the artifact to an isolated local staging process, probe readiness, run API/contract tests",
+      "result": "6 passed"
+    },
+    {
+      "stage": "Publish pipeline report",
+      "status": "PASS",
+      "duration_s": 0.001,
+      "what_it_did": "write run metadata and the human-readable summary",
+      "result": "2 reports published"
+    }
+  ],
+  "tests": [
+    {
+      "suite": "unit",
+      "total": 21,
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0,
+      "time_s": 0.036,
+      "modules": [
+        "test_config",
+        "test_orders",
+        "test_pricing"
+      ]
+    },
+    {
+      "suite": "integration",
+      "total": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "time_s": 0.036,
+      "modules": [
+        "test_deployment_readiness",
+        "test_health_contract",
+        "test_order_api"
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "artifacts/order-service-1.4.0.tar.gz",
+      "sha256": "ab613bd964a91446e3447bcf5dd002a911903680c2a4c82f4c05918497f19fca",
+      "size_bytes": 3085,
+      "version": "1.4.0",
+      "files": 5
+    }
+  ],
+  "quality_checks": [
+    {
+      "check": "Static analysis",
+      "result": "15 Python files, 0 errors, 0 warnings",
+      "rules": "syntax, unused-import, bare-except, no-print, line-length, whitespace, secrets"
+    },
+    {
+      "check": "Secret scan",
+      "result": "18 files scanned, 0 findings"
+    },
+    {
+      "check": "Dependency constraints",
+      "result": "1 declared, all resolved; 0 without upper bound"
+    },
+    {
+      "check": "Artifact integrity",
+      "result": "sha256 ab613bd964a91446..., 5 files checksummed, reproducible build"
+    },
+    {
+      "check": "Version metadata",
+      "result": "pyproject and app.__version__ agree on 1.4.0"
+    },
+    {
+      "check": "Deployment manifest policy",
+      "result": "environment=staging, port range + probe path validated"
+    },
+    {
+      "check": "Readiness probe",
+      "result": "GET /health -> HTTP 200"
+    },
+    {
+      "check": "API contract tests",
+      "result": "6 integration tests passed"
+    }
+  ],
+  "timing": {
+    "total_s": 0.755,
+    "slowest_stage": "Integration & deployment validation",
+    "slowest_s": 0.426,
+    "started_at": "2026-11-07T20:39:26.891Z",
+    "finished_at": "2026-11-07T20:39:27.648Z"
+  },
+  "root_cause": "No failure detected - no root-cause analysis required.",
+  "evidence": [
+    {
+      "source": "logs/01_checkout.log",
+      "finding": "Checkout & environment validation: PASS",
+      "excerpt": "tree 37108b64f976, 18 files, python 3.13.18"
+    },
+    {
+      "source": "logs/02_dependencies.log",
+      "finding": "Dependency installation: PASS",
+      "excerpt": "1/1 resolved; app runtime uses stdlib only"
+    },
+    {
+      "source": "logs/03_lint.log",
+      "finding": "Lint, static & secret checks: PASS",
+      "excerpt": "15 files, 0 errors, 0 secrets"
+    },
+    {
+      "source": "logs/04_unit_tests.log",
+      "finding": "Unit tests: PASS",
+      "excerpt": "21 passed"
+    },
+    {
+      "source": "logs/05_package.log",
+      "finding": "Build & package artifact: PASS",
+      "excerpt": "order-service-1.4.0.tar.gz sha256:ab613bd964a9"
+    },
+    {
+      "source": "logs/06_integration.log",
+      "finding": "Integration & deployment validation: PASS",
+      "excerpt": "6 passed"
+    },
+    {
+      "source": "logs/07_publish.log",
+      "finding": "Publish pipeline report: PASS",
+      "excerpt": "2 reports published"
+    }
+  ],
+  "impact": {
+    "severity": "NONE",
+    "area": "release",
+    "blast_radius": [],
+    "customer_impact": "No adverse impact expected: verified by unit, contract and deployment tests.",
+    "production_impact": "None - this pipeline never deploys to production.",
+    "release_blocked": false
+  },
+  "release_readiness": {
+    "ready": true,
+    "verdict": "READY",
+    "conditions": [
+      "Change-approval for production promotion (human gate)",
+      "Deploy the exact artifact sha256 validated here - do not rebuild"
+    ]
+  },
+  "recommendation": "Promote this artifact to the next environment via the standard change process.",
+  "proposed_changes": [],
+  "validation_plan": [
+    "Post-deploy: run readiness probe and smoke test against the target environment",
+    "Watch error rate / latency SLOs for 30 minutes after promotion"
+  ],
+  "rollback_plan": [
+    "Re-deploy the previously released artifact by its sha256 (immutable artifacts)",
+    "No configuration migration involved, so rollback is a pure redeploy"
+  ],
+  "confidence": 0.97,
+  "auto_remediable": false,
+  "decision": "NO_ACTION_REQUIRED",
+  "narrator": "rule-based"
+}

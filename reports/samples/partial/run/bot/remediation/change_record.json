@@ -1,0 +1,16 @@
+{
+  "run_id": "20261107-203929-partial",
+  "status": "verified",
+  "approved_by": "demo.approver",
+  "approved_at": "2026-11-07T20:39:30.037Z",
+  "playbook": "PB-002 readiness-probe-path-mismatch",
+  "files": [
+    {
+      "path": "config/deploy.json",
+      "line": 5,
+      "backup": "bot/remediation/backups/config/deploy.json.orig",
+      "sha256_before": "5d52e51d0014bf2632e2df971991df21373f9e27e031f70729ed67cf95f6d69f",
+      "sha256_after": "55ff8dd8457d9a54701af1952402a7a106caaaa03d37f4ee4291c3a46e4a3275"
+    }
+  ]
+}

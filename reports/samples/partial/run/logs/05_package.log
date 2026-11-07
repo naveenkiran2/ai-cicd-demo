@@ -1,0 +1,9 @@
+2026-11-07T20:39:29.643Z [INFO] stage package: validate version metadata and build a reproducible, checksummed artifact
+2026-11-07T20:39:29.644Z [INFO] package metadata: name=order-service version=1.4.0 (app.__version__=1.4.0)
+2026-11-07T20:39:29.645Z [INFO]   + app/__init__.py  sha256:0c4eae29f87a
+2026-11-07T20:39:29.645Z [INFO]   + app/config.py  sha256:2f73f157c909
+2026-11-07T20:39:29.645Z [INFO]   + app/orders.py  sha256:a52bc87ce49c
+2026-11-07T20:39:29.645Z [INFO]   + app/pricing.py  sha256:e5985e44e5c6
+2026-11-07T20:39:29.645Z [INFO]   + app/service.py  sha256:4ab241b3a633
+2026-11-07T20:39:29.645Z [INFO] built artifacts/order-service-1.4.0.tar.gz (3075 bytes) sha256:115f03b21c616aad8dc4ed9db5846d2de07bfd4215c15b3d161bde56b3eb2739
+2026-11-07T20:39:29.645Z [INFO] stage package finished: PASS in 0.002s

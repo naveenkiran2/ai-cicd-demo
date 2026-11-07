@@ -1,0 +1,28 @@
+{
+  "verified": true,
+  "targeted": [
+    {
+      "stage": "lint",
+      "status": "PASS",
+      "summary": "15 files, 0 errors, 0 secrets"
+    },
+    {
+      "stage": "unit_tests",
+      "status": "PASS",
+      "summary": "21 passed"
+    }
+  ],
+  "full_rerun": {
+    "run_id": "20261107-203927-failure-rerun1",
+    "status": "SUCCESS",
+    "stages": {
+      "checkout": "PASS",
+      "dependencies": "PASS",
+      "lint": "PASS",
+      "unit_tests": "PASS",
+      "package": "PASS",
+      "integration": "PASS",
+      "publish": "PASS"
+    }
+  }
+}

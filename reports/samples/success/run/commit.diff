@@ -1,0 +1,11 @@
+--- a/app/pricing.py
++++ b/app/pricing.py
+@@ -32,7 +32,7 @@
+ 
+ 
+ def calculate_total(subtotal, discount_pct=0, tax_rate_pct=0) -> dict:
+-    """Price an order: discount first, then tax on the discounted amount."""
++    """Price an order: discount first, then tax on the discounted amount (all values in USD)."""
+     if Decimal(str(subtotal)) < 0:
+         raise ValueError("subtotal must be >= 0")
+     discount = apply_discount(subtotal, discount_pct)

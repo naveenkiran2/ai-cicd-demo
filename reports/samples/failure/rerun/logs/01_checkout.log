@@ -1,0 +1,17 @@
+2026-11-07T20:39:28.490Z [INFO] stage checkout: snapshot the commit and verify interpreter + repository layout
+2026-11-07T20:39:28.490Z [INFO] checkout: snapshot of patched workspace artifacts/runs/20261107-203927-failure/workspace
+2026-11-07T20:39:28.492Z [INFO] source tree digest: db1233d7068c
+2026-11-07T20:39:28.492Z [INFO] commit diff:
+    | --- a/app/pricing.py
+    | +++ b/app/pricing.py
+    | @@ -20,7 +20,7 @@
+    |      discount_pct = Decimal(str(discount_pct))
+    |      if not Decimal("0") <= discount_pct <= HUNDRED:
+    |          raise ValueError(f"discount_pct must be between 0 and 100, got {discount_pct}")
+    | -    return to_money(subtotal * discount_pct)
+    | +    return to_money(subtotal * (discount_pct / HUNDRED))
+    |  
+    |  
+    |  def calculate_tax(taxable_amount, tax_rate_pct) -> Decimal:
+2026-11-07T20:39:28.492Z [INFO] python 3.13.18 on Linux x86_64
+2026-11-07T20:39:28.492Z [INFO] stage checkout finished: PASS in 0.002s

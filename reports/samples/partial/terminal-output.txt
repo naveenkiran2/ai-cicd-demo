@@ -1,0 +1,202 @@
+==============================================================================
+  DEMO SCENARIO: PARTIAL
+  Deployment manifest drift - late-stage failure
+==============================================================================
+
+>>> STEP 1  CI pipeline executes the commit
+==============================================================================
+  CI PIPELINE  order-service-ci  run 20261107-203929-partial
+  scenario=partial  branch=ops/probe-naming  author=dev.carol
+  commit: "OPS-87: align readiness probe with k8s naming convention"
+==============================================================================
+  [1/7] Checkout & environment validation .... PASS      0.00s  tree b2a70e30b7eb, 18 files, python 3.13.18
+  [2/7] Dependency installation .............. PASS      0.00s  1/1 resolved; app runtime uses stdlib only
+  [3/7] Lint, static & secret checks ......... PASS      0.01s  15 files, 0 errors, 0 secrets
+  [4/7] Unit tests ........................... PASS      0.26s  21 passed
+  [5/7] Build & package artifact ............. PASS      0.00s  order-service-1.4.0.tar.gz sha256:115f03b21c61
+  [6/7] Integration & deployment validation .. FAIL      0.39s  probe /healthz -> 404; 1 failed, 5 passed
+  [7/7] Publish pipeline report .............. PASS      0.00s  2 reports published
+
+-- Result --------------------------------------------------------------------
+  Pipeline status : FAILED   outcome: PARTIAL SUCCESS
+  Failed stage    : Integration & deployment validation  (failing tests: test_readiness_probe_path_is_served)
+  Duration        : 0.67s
+  Run directory   : artifacts/runs/20261107-203929-partial
+
+  Next: python -m ai_bot.analyze --run-id 20261107-203929-partial
+
+>>> STEP 2  AI bot analyses the run (logs, test reports, diff, source)
+==============================================================================
+  AI CI/CD BOT  incident analysis  run 20261107-203929-partial
+  ai-cicd-bot rule-engine v1.0 (deterministic)  |  scenario=partial
+==============================================================================
+
+-- 1. Executive summary ------------------------------------------------------
+  Run 20261107-203929-partial PARTIAL SUCCESS: 'Integration & deployment
+  validation' failed (probe /healthz -> 404; 1 failed, 5 passed). Root cause
+  (95% confidence): Readiness probe path /healthz not served (service exposes
+  /health). 5 earlier stages passed and their outputs are reusable (artifact
+  artifacts/order-service-1.4.0.tar.gz (sha256 115f03b21c61)). Production
+  impact: None. Failure was caught in isolated local staging validation. A
+  minimal fix is proposed and awaits human approval.
+
+-- 2. Pipeline status --------------------------------------------------------
+  Status: FAILED   Outcome: PARTIAL SUCCESS   Failed stage: integration   Duration: 0.67s
+  Commit: b2a70e30b7eb  "OPS-87: align readiness probe with k8s naming convention"  by dev.carol
+
+-- 3. Stage-by-stage status --------------------------------------------------
+  #  Stage                                Status  Time   Result                                        
+  -  -----------------------------------  ------  -----  ----------------------------------------------
+  1  Checkout & environment validation    PASS    0.00s  tree b2a70e30b7eb, 18 files, python 3.13.18   
+  2  Dependency installation              PASS    0.00s  1/1 resolved; app runtime uses stdlib only    
+  3  Lint, static & secret checks         PASS    0.01s  15 files, 0 errors, 0 secrets                 
+  4  Unit tests                           PASS    0.26s  21 passed                                     
+  5  Build & package artifact             PASS    0.00s  order-service-1.4.0.tar.gz sha256:115f03b21c61
+  6  Integration & deployment validation  FAIL    0.39s  probe /healthz -> 404; 1 failed, 5 passed     
+  7  Publish pipeline report              PASS    0.00s  2 reports published                           
+
+  Passed work : Checkout & environment validation, Dependency installation, Lint, static & secret checks, Unit tests, Build & package artifact, Publish pipeline report
+  Failed work : Integration & deployment validation
+  Not run     : -
+  Reusable    : artifact artifacts/order-service-1.4.0.tar.gz (sha256 115f03b21c61)
+
+-- 4. Root-cause analysis ----------------------------------------------------
+  Readiness probe path /healthz not served (service exposes /health)
+  Class: deployment_config_drift / readiness_probe_mismatch   Playbook: PB-002 readiness-probe-path-mismatch
+  The latest commit changed health_path in config/deploy.json from /health to
+  /healthz. The service (app/service.py) only serves /health, so the
+  platform's readiness probe gets HTTP 404 and the deployment can never become
+  ready. Application code and the artifact are healthy: all other integration
+  and contract tests pass.
+
+  Confidence: 95%
+    +0.60  probe path absent from service routes with a close match present
+    +0.15  404 (not 5xx/timeout) - service is up, path is wrong
+    +0.15  manifest line changed by the latest commit
+    +0.05  health contract passes on /health
+
+-- 5. Supporting evidence ----------------------------------------------------
+  [1] readiness probe returned 404 for the manifest's health_path
+      source: logs/06_integration.log:8
+      | readiness probe FAILED: GET /healthz -> HTTP 404
+  [2] manifest declares health_path /healthz
+      source: workspace:config/deploy.json:5
+      | "health_path": "/healthz",
+  [3] service only serves GET routes: ['/health']
+      source: workspace:app/service.py:30
+      | GET_ROUTES keys = ['/health']
+  [4] test_readiness_probe_path_is_served failed
+      source: test-reports/junit-integration.xml
+      | AssertionError: readiness probe GET /healthz returned HTTP 404
+  [5] service itself is healthy: 5 integration tests passed, including the /health health contract
+      source: test-reports/junit-integration.xml
+      | test_manifest_targets_this_service, test_health_contract_fields, test_unknown_route_returns_404, test_quote_end_to_end, test_invalid_order_returns_400
+  [6] config/deploy.json line 5 changed in the failing commit
+      source: commit.diff
+      | -  "health_path": "/health",
+      | +  "health_path": "/healthz",
+  [7] artifact built and checksummed before the failure - reusable
+      source: logs/05_package.log
+      | sha256:115f03b21c616aad8dc4ed9db5846d2de07bfd4215c15b3d161bde56b3eb2739
+
+-- 6. Impact & risk assessment -----------------------------------------------
+  Severity: MEDIUM   Area: deployment configuration   Release blocked: yes
+  Blast radius:
+    - config/deploy.json (environment config, not packaged in the artifact)
+    - platform readiness probe and rollout gating for order-service
+    - no application code affected; artifact sha256 unchanged
+  Customer impact if shipped: If promoted, pods would never pass readiness: rollout stalls or restart-loops and capacity drops during deploy.
+  Production impact now:      None. Failure was caught in isolated local staging validation.
+
+-- 7. Recommended solution & fix guide ---------------------------------------
+  Point the manifest back at the served route: set health_path to /health in
+  config/deploy.json. Config-only, one line, no rebuild needed.
+     1. Open config/deploy.json line 5.
+     2. Replace:  "health_path": "/healthz",
+     3. With:     "health_path": "/health",
+     4. Re-run ONLY the integration & deployment-validation stage against the existing artifact.
+     5. If it passes, re-run the full pipeline for a clean, auditable green build.
+     6. If /healthz is a genuine platform convention, raise a separate change to add the route in app/service.py together with contract tests - do not mix that into this fix.
+  Alternatives considered:
+    - Add a /healthz route to the service - rejected for auto-fix: code change, needs rebuild and a contract decision; broader than necessary.
+
+-- 8. Files proposed for modification ----------------------------------------
+  config/deploy.json:5  (align readiness probe with served route)
+    - "health_path": "/healthz",
+    + "health_path": "/health",
+
+-- 9. Validation plan --------------------------------------------------------
+     1. Safety gate: allow-list, file-hash precondition, change-size limit, syntax check of config/deploy.json
+     2. Targeted rerun: Integration & deployment validation (reusing the already-built artifact)
+     3. Full pipeline rerun (all 7 stages) on the patched workspace
+     4. Success is declared only if the full rerun status is SUCCESS
+
+-- 10. Rollback plan ---------------------------------------------------------
+    - Automatic: if targeted or full validation fails, restore the byte-for-byte backups and log it
+    - Manual: python -m ai_bot.remediate --run-id 20261107-203929-partial --rollback
+    - Source control: the patch is saved as a .diff; revert it like any commit
+
+-- 11. Final outcome ---------------------------------------------------------
+  Remediation not run yet.
+  Preview : python -m ai_bot.remediate --run-id 20261107-203929-partial
+  Apply   : python -m ai_bot.remediate --run-id 20261107-203929-partial --approve
+
+  Reports: artifacts/runs/20261107-203929-partial/bot/diagnosis.json, artifacts/runs/20261107-203929-partial/bot/diagnosis.md
+
+>>> STEP 3  Guided self-healing (human approval required)
+==============================================================================
+  AI CI/CD BOT  self-healing remediation  run 20261107-203929-partial
+  mode: APPLY (approved)
+==============================================================================
+  [01/10] Detect failure ................... FAIL          Integration & deployment validation: probe /healthz -> 404; 1 failed, 5 passed
+  [02/10] Classify failure ................. INFO          deployment_config_drift / readiness_probe_mismatch  (PB-002 readiness-probe-path-mismatch, 95%)
+  [03/10] Gather evidence .................. INFO          7 items from commit.diff, logs/05_package.log, logs/06_integration.log, test-reports/junit-integration.xml, workspace
+  [04/10] Propose minimal remediation ...... INFO          1 file(s): config/deploy.json:5
+            - "health_path": "/healthz",
+            + "health_path": "/health",
+  [05/10] Safety gate & human approval ..... PASS          14/14 checks; approved by demo.approver
+  [06/10] Backup & patch record ............ PASS          1 backup(s) + bot/remediation/patch.diff
+  [07/10] Apply allow-listed change ........ FIXED         config/deploy.json 5d52e51d->55ff8dd8
+  [08/10] Targeted validation .............. INFO          rerunning only: integration
+          [targeted] Integration & deployment validation ... PASS     0.34s  6 passed
+            => RERUN PASSED
+  [09/10] Full pipeline rerun .............. INFO          all 7 stages on the patched workspace
+==============================================================================
+  CI PIPELINE  order-service-ci  run 20261107-203929-partial-rerun1
+  scenario=partial  branch=bot/fix-20261107-203929-partial  author=ai-cicd-bot (approved by demo.approver)
+  commit: "ai-bot fix: Readiness probe path /healthz not served (service exposes /health)"
+  rerun of 20261107-203929-partial (trigger: ai-bot-remediation)
+==============================================================================
+  [1/7] Checkout & environment validation .... PASS      0.00s  tree db1233d7068c, 18 files, python 3.13.18
+  [2/7] Dependency installation .............. PASS      0.00s  1/1 resolved; app runtime uses stdlib only
+  [3/7] Lint, static & secret checks ......... PASS      0.01s  15 files, 0 errors, 0 secrets
+  [4/7] Unit tests ........................... PASS      0.36s  21 passed
+  [5/7] Build & package artifact ............. PASS      0.00s  order-service-1.4.0.tar.gz sha256:115f03b21c61
+  [6/7] Integration & deployment validation .. PASS      0.37s  6 passed
+  [7/7] Publish pipeline report .............. PASS      0.00s  2 reports published
+
+-- Result --------------------------------------------------------------------
+  Pipeline status : SUCCESS   outcome: SUCCESS
+  Duration        : 0.75s
+  Run directory   : artifacts/runs/20261107-203929-partial-rerun1
+  [10/10] Audit trail & final report ....... RERUN PASSED  bot/remediation/final_report.md
+
+-- 11. Final outcome after remediation ---------------------------------------
+  Result: RERUN PASSED   approved by: demo.approver
+  Stage                                Before  Targeted  Full rerun
+  -----------------------------------  ------  --------  ----------
+  Checkout & environment validation    PASS    -         PASS      
+  Dependency installation              PASS    -         PASS      
+  Lint, static & secret checks         PASS    -         PASS      
+  Unit tests                           PASS    -         PASS      
+  Build & package artifact             PASS    -         PASS      
+  Integration & deployment validation  FAIL    PASS      PASS      
+  Publish pipeline report              PASS    -         PASS      
+  Files changed:
+    config/deploy.json  sha256 5d52e51d00 -> 55ff8dd845
+  Rerun run id: 20261107-203929-partial-rerun1
+  Audit trail : bot/remediation/audit.jsonl
+
+>>> RESULT
+  FAIL -> FIXED -> RERUN PASSED  rerun 20261107-203929-partial-rerun1; files changed: config/deploy.json
+  sample exported to reports/samples/partial

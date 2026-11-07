@@ -1,0 +1,12 @@
+{
+  "name": "partial",
+  "title": "Deployment manifest drift - late-stage failure",
+  "description": "An ops change renames the readiness probe path in the deployment manifest to /healthz, but the service only serves /health. Build, lint, unit tests and packaging pass; deployment validation fails.",
+  "commit": {"message": "OPS-87: align readiness probe with k8s naming convention", "author": "dev.carol", "branch": "ops/probe-naming"},
+  "changes": [
+    {"file": "config/deploy.json",
+     "find": "\"health_path\": \"/health\"",
+     "replace": "\"health_path\": \"/healthz\""}
+  ],
+  "expected": {"status": "FAILED", "failed_stage": "integration"}
+}

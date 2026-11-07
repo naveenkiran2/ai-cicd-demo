@@ -1,0 +1,6 @@
+2026-11-07T20:39:28.171Z [INFO] stage unit_tests: verify domain logic in isolation
+2026-11-07T20:39:28.172Z [INFO] $ python -m pytest tests/unit -q -rfE --junitxml=test-reports/junit-unit.xml
+    | .....................                                                    [100%]
+    | 21 passed in 0.03s
+2026-11-07T20:39:28.489Z [INFO] pytest exit code: 0
+2026-11-07T20:39:28.489Z [INFO] stage unit_tests finished: PASS in 0.318s

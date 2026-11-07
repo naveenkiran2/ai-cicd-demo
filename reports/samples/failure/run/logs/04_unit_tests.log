@@ -1,0 +1,51 @@
+2026-11-07T20:39:27.772Z [INFO] stage unit_tests: verify domain logic in isolation
+2026-11-07T20:39:27.772Z [INFO] $ python -m pytest tests/unit -q -rfE --junitxml=test-reports/junit-unit.xml
+    | .........F.....FFF...                                                    [100%]
+    | =================================== FAILURES ===================================
+    | ___________________________ test_quote_with_discount ___________________________
+    | 
+    |     def test_quote_with_discount():
+    |         items = [LineItem("SKU-1", 1, Decimal("80.00")), LineItem("SKU-2", 2, Decimal("10.00"))]
+    |         quote = build_quote(items, discount_pct=25, tax_rate_pct=0)
+    | >       assert quote["discount"] == "25.00"
+    | E       AssertionError: assert '2500.00' == '25.00'
+    | E         
+    | E         - 25.00
+    | E         + 2500.00
+    | E         ?   ++
+    | 
+    | tests/unit/test_orders.py:22: AssertionError
+    | _______________________ test_ten_percent_discount_amount _______________________
+    | 
+    |     def test_ten_percent_discount_amount():
+    | >       assert apply_discount(200, 10) == Decimal("20.00")
+    | E       AssertionError: assert Decimal('2000.00') == Decimal('20.00')
+    | E        +  where Decimal('2000.00') = apply_discount(200, 10)
+    | E        +  and   Decimal('20.00') = Decimal('20.00')
+    | 
+    | tests/unit/test_pricing.py:17: AssertionError
+    | _______________________ test_ten_percent_discount_total ________________________
+    | 
+    |     def test_ten_percent_discount_total():
+    | >       assert calculate_total(100, discount_pct=10)["total"] == Decimal("90.00")
+    | E       AssertionError: assert Decimal('-900.00') == Decimal('90.00')
+    | E        +  where Decimal('90.00') = Decimal('90.00')
+    | 
+    | tests/unit/test_pricing.py:21: AssertionError
+    | ____________________________ test_discount_then_tax ____________________________
+    | 
+    |     def test_discount_then_tax():
+    |         result = calculate_total(100, discount_pct=10, tax_rate_pct=8)
+    | >       assert result["discount"] == Decimal("10.00")
+    | E       AssertionError: assert Decimal('1000.00') == Decimal('10.00')
+    | E        +  where Decimal('10.00') = Decimal('10.00')
+    | 
+    | tests/unit/test_pricing.py:26: AssertionError
+    | =========================== short test summary info ============================
+    | FAILED tests/unit/test_orders.py::test_quote_with_discount - AssertionError: ...
+    | FAILED tests/unit/test_pricing.py::test_ten_percent_discount_amount - Asserti...
+    | FAILED tests/unit/test_pricing.py::test_ten_percent_discount_total - Assertio...
+    | FAILED tests/unit/test_pricing.py::test_discount_then_tax - AssertionError: a...
+    | 4 failed, 17 passed in 0.07s
+2026-11-07T20:39:28.154Z [INFO] pytest exit code: 1
+2026-11-07T20:39:28.154Z [INFO] stage unit_tests finished: FAIL in 0.382s

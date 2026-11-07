@@ -1,0 +1,14 @@
+2026-11-07T20:39:27.220Z [INFO] stage integration: deploy the artifact to an isolated local staging process, probe readiness, run API/contract tests
+2026-11-07T20:39:27.221Z [INFO] artifact under test: order-service-1.4.0.tar.gz sha256:ab613bd964a91446e3447bcf5dd002a911903680c2a4c82f4c05918497f19fca
+2026-11-07T20:39:27.221Z [INFO] deployment manifest config/deploy.json: {"environment": "staging", "health_path": "/health", "port": 8080, "readiness_timeout_seconds": 5, "replicas": 2, "service": "order-service"}
+2026-11-07T20:39:27.221Z [INFO] manifest policy: OK (environment=staging, port=8080)
+2026-11-07T20:39:27.222Z [INFO] deployed artifact to isolated local staging dir staging (ephemeral port, 127.0.0.1 only)
+2026-11-07T20:39:27.304Z [INFO] service started pid=788 url=http://127.0.0.1:43033
+2026-11-07T20:39:27.315Z [INFO] readiness probe attempt 1: GET /health -> HTTP 200
+2026-11-07T20:39:27.315Z [INFO] readiness probe PASSED: GET /health -> HTTP 200
+2026-11-07T20:39:27.315Z [INFO] $ python -m pytest tests/integration -q -rfE --junitxml=test-reports/junit-integration.xml
+    | ......                                                                   [100%]
+    | 6 passed in 0.03s
+2026-11-07T20:39:27.645Z [INFO] pytest exit code: 0
+2026-11-07T20:39:27.647Z [INFO] service stopped; staging environment torn down
+2026-11-07T20:39:27.647Z [INFO] stage integration finished: PASS in 0.426s

@@ -1,0 +1,30 @@
+{
+  "name": "order-service",
+  "version": "1.4.0",
+  "artifact": "order-service-1.4.0.tar.gz",
+  "sha256": "ab613bd964a91446e3447bcf5dd002a911903680c2a4c82f4c05918497f19fca",
+  "size_bytes": 3085,
+  "source_tree": "37108b64f976",
+  "files": [
+    {
+      "path": "app/__init__.py",
+      "sha256": "0c4eae29f87a21355ae21beec4ddbf1cef66c6bdb73015535aa32060e1c4f9e4"
+    },
+    {
+      "path": "app/config.py",
+      "sha256": "2f73f157c9093d2ba228f34f4a853d335f2a2eef17d7d0218f2665a7188960e5"
+    },
+    {
+      "path": "app/orders.py",
+      "sha256": "a52bc87ce49c79819d5793f140ea92b86418b35aafee99a99359f712b346817e"
+    },
+    {
+      "path": "app/pricing.py",
+      "sha256": "995df95cdb6f0c77942674853c721802b92d1aef6b089ee2f3f370a35712b8b4"
+    },
+    {
+      "path": "app/service.py",
+      "sha256": "4ab241b3a633c8631bc502eef698e75c8aeb72f8ca8326aaba82b94542c634bb"
+    }
+  ]
+}

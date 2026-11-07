@@ -1,0 +1,72 @@
+[
+  {
+    "check": "human-approval",
+    "passed": true,
+    "detail": "explicit --approve given"
+  },
+  {
+    "check": "playbook-auto-remediable",
+    "passed": true,
+    "detail": "playbook PB-002 readiness-probe-path-mismatch permits auto-fix"
+  },
+  {
+    "check": "confidence-threshold",
+    "passed": true,
+    "detail": "95% >= 80%"
+  },
+  {
+    "check": "change-scope",
+    "passed": true,
+    "detail": "1 file(s), limits 2 files / 5 lines"
+  },
+  {
+    "check": "workspace-in-project",
+    "passed": true,
+    "detail": "workspace artifacts/runs/20261107-203929-partial/workspace"
+  },
+  {
+    "check": "no-production-target",
+    "passed": true,
+    "detail": "target environment: local"
+  },
+  {
+    "check": "path-inside-workspace:config/deploy.json",
+    "passed": true,
+    "detail": "config/deploy.json"
+  },
+  {
+    "check": "path-allow-listed:config/deploy.json",
+    "passed": true,
+    "detail": "allowed=('app/*.py', 'config/*.json')"
+  },
+  {
+    "check": "no-symlink:config/deploy.json",
+    "passed": true,
+    "detail": "regular existing file"
+  },
+  {
+    "check": "unchanged-since-diagnosis:config/deploy.json",
+    "passed": true,
+    "detail": "sha256 5d52e51d0014"
+  },
+  {
+    "check": "exact-single-match:config/deploy.json",
+    "passed": true,
+    "detail": "old text found 1x"
+  },
+  {
+    "check": "syntax-valid-after:config/deploy.json",
+    "passed": true,
+    "detail": "patched file parses"
+  },
+  {
+    "check": "no-secret-introduced:config/deploy.json",
+    "passed": true,
+    "detail": "clean"
+  },
+  {
+    "check": "manifest-not-production:config/deploy.json",
+    "passed": true,
+    "detail": "environment=staging"
+  }
+]

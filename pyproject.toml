@@ -1,0 +1,14 @@
+[project]
+name = "order-service"
+version = "1.4.0"
+description = "Sample order service used by the ai-cicd-demo AI-assisted CI/CD pipeline"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=7.0,<10"]
+llm = ["anthropic>=0.40"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit", "tests/integration"]
+addopts = "-p no:cacheprovider"

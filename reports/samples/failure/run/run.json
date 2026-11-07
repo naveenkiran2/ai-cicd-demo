@@ -1,0 +1,172 @@
+{
+  "run_id": "20261107-203927-failure",
+  "scenario": "failure",
+  "created_at": "2026-11-07T20:39:27.757Z",
+  "pipeline": "order-service-ci",
+  "status": "FAILED",
+  "outcome": "failure",
+  "failed_stage": "unit_tests",
+  "trigger": "manual",
+  "parent_run_id": null,
+  "commit": {
+    "message": "PRICE-142: simplify discount calculation",
+    "author": "dev.bob",
+    "branch": "feature/price-142",
+    "sha": "b46a02bfaab3"
+  },
+  "environment": {
+    "python": "3.13.18",
+    "platform": "Linux-6.18.44-fc-v310-x86_64-with-glibc2.39",
+    "executor": "local"
+  },
+  "stages": [
+    {
+      "key": "checkout",
+      "name": "Checkout & environment validation",
+      "order": 1,
+      "status": "PASS",
+      "summary": "tree b46a02bfaab3, 18 files, python 3.13.18",
+      "started_at": "2026-11-07T20:39:27.759Z",
+      "finished_at": "2026-11-07T20:39:27.762Z",
+      "duration_s": 0.003,
+      "log_file": "logs/01_checkout.log",
+      "reports": [],
+      "metrics": {
+        "tree_sha": "b46a02bfaab3",
+        "files": 18,
+        "python": "3.13.18"
+      },
+      "error": null
+    },
+    {
+      "key": "dependencies",
+      "name": "Dependency installation",
+      "order": 2,
+      "status": "PASS",
+      "summary": "1/1 resolved; app runtime uses stdlib only",
+      "started_at": "2026-11-07T20:39:27.763Z",
+      "finished_at": "2026-11-07T20:39:27.764Z",
+      "duration_s": 0.002,
+      "log_file": "logs/02_dependencies.log",
+      "reports": [],
+      "metrics": {
+        "declared": 1,
+        "resolved": {
+          "pytest": "9.2.0"
+        },
+        "missing": [],
+        "unbounded": []
+      },
+      "error": null
+    },
+    {
+      "key": "lint",
+      "name": "Lint, static & secret checks",
+      "order": 3,
+      "status": "PASS",
+      "summary": "15 files, 0 errors, 0 secrets",
+      "started_at": "2026-11-07T20:39:27.764Z",
+      "finished_at": "2026-11-07T20:39:27.772Z",
+      "duration_s": 0.008,
+      "log_file": "logs/03_lint.log",
+      "reports": [
+        "test-reports/lint.json"
+      ],
+      "metrics": {
+        "python_files": 15,
+        "files_secret_scanned": 18,
+        "errors": 0,
+        "warnings": 0,
+        "secret_findings": 0,
+        "checks": [
+          "syntax",
+          "unused-import",
+          "bare-except",
+          "no-print",
+          "line-length",
+          "whitespace",
+          "secrets"
+        ]
+      },
+      "error": null
+    },
+    {
+      "key": "unit_tests",
+      "name": "Unit tests",
+      "order": 4,
+      "status": "FAIL",
+      "summary": "4 failed, 17 passed",
+      "started_at": "2026-11-07T20:39:27.772Z",
+      "finished_at": "2026-11-07T20:39:28.154Z",
+      "duration_s": 0.382,
+      "log_file": "logs/04_unit_tests.log",
+      "reports": [
+        "test-reports/junit-unit.xml",
+        "test-reports/unit-summary.json"
+      ],
+      "metrics": {
+        "tests": 21,
+        "passed": 17,
+        "failed": 4,
+        "skipped": 0,
+        "test_time_s": 0.071,
+        "suites": [
+          "tests.unit.test_config",
+          "tests.unit.test_orders",
+          "tests.unit.test_pricing"
+        ]
+      },
+      "error": "failing tests: test_quote_with_discount, test_ten_percent_discount_amount, test_ten_percent_discount_total"
+    },
+    {
+      "key": "package",
+      "name": "Build & package artifact",
+      "order": 5,
+      "status": "SKIPPED",
+      "summary": "skipped: upstream stage 'unit_tests' failed",
+      "started_at": null,
+      "finished_at": null,
+      "duration_s": 0.0,
+      "log_file": null,
+      "reports": [],
+      "metrics": {},
+      "error": null
+    },
+    {
+      "key": "integration",
+      "name": "Integration & deployment validation",
+      "order": 6,
+      "status": "SKIPPED",
+      "summary": "skipped: upstream stage 'unit_tests' failed",
+      "started_at": null,
+      "finished_at": null,
+      "duration_s": 0.0,
+      "log_file": null,
+      "reports": [],
+      "metrics": {},
+      "error": null
+    },
+    {
+      "key": "publish",
+      "name": "Publish pipeline report",
+      "order": 7,
+      "status": "PASS",
+      "summary": "2 reports published",
+      "started_at": "2026-11-07T20:39:28.154Z",
+      "finished_at": "2026-11-07T20:39:28.155Z",
+      "duration_s": 0.0,
+      "log_file": "logs/07_publish.log",
+      "reports": [],
+      "metrics": {
+        "published": [
+          "run.json",
+          "summary.md"
+        ]
+      },
+      "error": null
+    }
+  ],
+  "artifacts": [],
+  "duration_s": 0.396,
+  "finished_at": "2026-11-07T20:39:28.155Z"
+}

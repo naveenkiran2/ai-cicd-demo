@@ -1,0 +1,44 @@
+{
+  "totals": {
+    "tests": 6,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "time_s": 0.037,
+    "failed": 0,
+    "passed": 6
+  },
+  "failures": [],
+  "cases": [
+    {
+      "test": "tests.integration.test_deployment_readiness::test_manifest_targets_this_service",
+      "outcome": "passed",
+      "time_s": 0.001
+    },
+    {
+      "test": "tests.integration.test_deployment_readiness::test_readiness_probe_path_is_served",
+      "outcome": "passed",
+      "time_s": 0.01
+    },
+    {
+      "test": "tests.integration.test_health_contract::test_health_contract_fields",
+      "outcome": "passed",
+      "time_s": 0.002
+    },
+    {
+      "test": "tests.integration.test_health_contract::test_unknown_route_returns_404",
+      "outcome": "passed",
+      "time_s": 0.001
+    },
+    {
+      "test": "tests.integration.test_order_api::test_quote_end_to_end",
+      "outcome": "passed",
+      "time_s": 0.001
+    },
+    {
+      "test": "tests.integration.test_order_api::test_invalid_order_returns_400",
+      "outcome": "passed",
+      "time_s": 0.001
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+{
+  "run_id": "20261107-203927-failure",
+  "scenario": "failure",
+  "pipeline": "order-service-ci",
+  "analyzer": "ai-cicd-bot rule-engine v1.0 (deterministic)",
+  "generated_at": "2026-11-07T20:39:28.155Z",
+  "status": "FAILED",
+  "outcome": "failure",
+  "failed_stage": "unit_tests",
+  "commit": {
+    "message": "PRICE-142: simplify discount calculation",
+    "author": "dev.bob",
+    "branch": "feature/price-142",
+    "sha": "b46a02bfaab3"
+  },
+  "duration_s": 0.396,
+  "stages": [
+    {
+      "order": 1,
+      "key": "checkout",
+      "name": "Checkout & environment validation",
+      "status": "PASS",
+      "duration_s": 0.003,
+      "summary": "tree b46a02bfaab3, 18 files, python 3.13.18"
+    },
+    {
+      "order": 2,
+      "key": "dependencies",
+      "name": "Dependency installation",
+      "status": "PASS",
+      "duration_s": 0.002,
+      "summary": "1/1 resolved; app runtime uses stdlib only"
+    },
+    {
+      "order": 3,
+      "key": "lint",
+      "name": "Lint, static & secret checks",
+      "status": "PASS",
+      "duration_s": 0.008,
+      "summary": "15 files, 0 errors, 0 secrets"
+    },
+    {
+      "order": 4,
+      "key": "unit_tests",
+      "name": "Unit tests",
+      "status": "FAIL",
+      "duration_s": 0.382,
+      "summary": "4 failed, 17 passed"
+    },
+    {
+      "order": 5,
+      "key": "package",
+      "name": "Build & package artifact",
+      "status": "SKIPPED",
+      "duration_s": 0.0,
+      "summary": "skipped: upstream stage 'unit_tests' failed"
+    },
+    {
+      "order": 6,
+      "key": "integration",
+      "name": "Integration & deployment validation",
+      "status": "SKIPPED",
+      "duration_s": 0.0,
+      "summary": "skipped: upstream stage 'unit_tests' failed"
+    },
+    {
+      "order": 7,
+      "key": "publish",
+      "name": "Publish pipeline report",
+      "status": "PASS",
+      "duration_s": 0.0,
+      "summary": "2 reports published"
+    }
+  ],
+  "passed_work": [
+    "Checkout & environment validation",
+    "Dependency installation",
+    "Lint, static & secret checks",
+    "Publish pipeline report"
+  ],
+  "failed_work": [
+    "Unit tests"
+  ],
+  "skipped_work": [
+    "Build & package artifact",
+    "Integration & deployment validation"
+  ],
+  "title": "Percentage not normalised in apply_discount() (app/pricing.py:23)",
+  "executive_summary": "Run 20261107-203927-failure FAILED: 'Unit tests' failed (4 failed, 17 passed). Root cause (95% confidence): Percentage not normalised in apply_discount() (app/pricing.py:23). Production impact: None. The pipeline stopped at unit tests; no artifact was built or deployed. A minimal fix is proposed and awaits human approval.",
+  "failure_class": "unit_test_regression / calculation_defect",
+  "playbook": "PB-001 percentage-scale-error",
+  "failed_stage_detail": {
+    "key": "unit_tests",
+    "name": "Unit tests",
+    "summary": "4 failed, 17 passed",
+    "error": "failing tests: test_quote_with_discount, test_ten_percent_discount_amount, test_ten_percent_discount_total",
+    "log_file": "logs/04_unit_tests.log"
+  },
+  "reusable_outputs": [],
+  "root_cause": "The latest commit changed app/pricing.py:23 in apply_discount() to multiply by 'discount_pct' directly. 'discount_pct' is on a 0-100 scale, so a 10% discount is applied as 1000%. Every failing assertion is consistent with this: observed discounts are exactly 100x the expected value, and totals go negative.",
+  "evidence": [
+    {
+      "source": "logs/04_unit_tests.log",
+      "finding": "4 of 21 unit tests failed",
+      "excerpt": "FAILED tests.unit.test_orders::test_quote_with_discount\nFAILED tests.unit.test_pricing::test_ten_percent_discount_amount\nFAILED tests.unit.test_pricing::test_ten_percent_discount_total\nFAILED tests.unit.test_pricing::test_discount_then_tax"
+    },
+    {
+      "source": "test-reports/junit-unit.xml",
+      "finding": "test_quote_with_discount: actual value is exactly 100x expected",
+      "excerpt": "assert '2500.00' == '25.00'"
+    },
+    {
+      "source": "test-reports/junit-unit.xml",
+      "finding": "test_ten_percent_discount_amount: actual value is exactly 100x expected",
+      "excerpt": "assert Decimal('2000.00') == Decimal('20.00')"
+    },
+    {
+      "source": "test-reports/junit-unit.xml",
+      "finding": "test_discount_then_tax: actual value is exactly 100x expected",
+      "excerpt": "assert Decimal('1000.00') == Decimal('10.00')"
+    },
+    {
+      "source": "test-reports/junit-unit.xml",
+      "finding": "order totals go negative in test_ten_percent_discount_total",
+      "excerpt": "assert Decimal('-900.00') == Decimal('90.00')"
+    },
+    {
+      "source": "workspace:app/pricing.py:23",
+      "finding": "'discount_pct' (0-100 scale) used as a raw multiplier in apply_discount()",
+      "excerpt": "return to_money(subtotal * discount_pct)"
+    },
+    {
+      "source": "commit.diff",
+      "finding": "line 23 of app/pricing.py was changed by the failing commit",
+      "excerpt": "-    return to_money(subtotal * (discount_pct / HUNDRED))\n+    return to_money(subtotal * discount_pct)"
+    },
+    {
+      "source": "static analysis",
+      "finding": "every failing test module imports app.pricing (directly or transitively)",
+      "excerpt": "tests/unit/test_orders.py -> app/orders.py, app/pricing.py\ntests/unit/test_pricing.py -> app/pricing.py"
+    }
+  ],
+  "impact": {
+    "severity": "HIGH",
+    "area": "customer-facing pricing",
+    "blast_radius": [
+      "app/pricing.py :: apply_discount() (defect location)",
+      "app/orders.py (depends on app.pricing)",
+      "app/service.py (depends on app.pricing)",
+      "HTTP API POST /orders/quote"
+    ],
+    "customer_impact": "Any discounted order would be mispriced (discount 100x too large, negative totals) - direct revenue and trust impact if released.",
+    "production_impact": "None. The pipeline stopped at unit tests; no artifact was built or deployed.",
+    "release_blocked": true
+  },
+  "recommendation": "Restore percentage normalisation: change 'discount_pct' to '(discount_pct / HUNDRED)' on app/pricing.py:23. One-line change, no behaviour change for 0% discounts.",
+  "fix_guide": [
+    "Open app/pricing.py at line 23 (apply_discount).",
+    "Replace:  return to_money(subtotal * discount_pct)",
+    "With:     return to_money(subtotal * (discount_pct / HUNDRED))",
+    "Re-run lint and the unit test stage (targeted validation).",
+    "Re-run the full pipeline to rebuild the artifact and run integration tests.",
+    "Add the 100x-ratio assertion pattern to code review guidance for money/percentage code."
+  ],
+  "alternatives_considered": [
+    "Change tests to match new behaviour - rejected: tests encode the pricing contract; bot may not edit tests.",
+    "Revert the whole commit - viable, but broader than the one-line defect."
+  ],
+  "proposed_changes": [
+    {
+      "path": "app/pricing.py",
+      "line": 23,
+      "old": "    return to_money(subtotal * discount_pct)",
+      "new": "    return to_money(subtotal * (discount_pct / HUNDRED))",
+      "reason": "normalise 0-100 percentage in apply_discount()",
+      "sha256_before": "5390a7d26812cb3e2cd2418d30d88981a34698d7d930b202180a6f6d36349863"
+    }
+  ],
+  "targeted_validation": [
+    "lint",
+    "unit_tests"
+  ],
+  "validation_plan": [
+    "Safety gate: allow-list, file-hash precondition, change-size limit, syntax check of app/pricing.py",
+    "Targeted rerun: Lint, static & secret checks, Unit tests",
+    "Full pipeline rerun (all 7 stages) on the patched workspace",
+    "Success is declared only if the full rerun status is SUCCESS"
+  ],
+  "rollback_plan": [
+    "Automatic: if targeted or full validation fails, restore the byte-for-byte backups and log it",
+    "Manual: python -m ai_bot.remediate --run-id 20261107-203927-failure --rollback",
+    "Source control: the patch is saved as a .diff; revert it like any commit"
+  ],
+  "confidence": 0.95,
+  "confidence_factors": [
+    {
+      "signal": "percentage variable multiplied without /100 on the failing code path",
+      "weight": 0.55
+    },
+    {
+      "signal": "suspect line was modified in the latest commit",
+      "weight": 0.2
+    },
+    {
+      "signal": "3 assertion(s) off by exactly 100x (scale error signature)",
+      "weight": 0.15
+    },
+    {
+      "signal": "all failing tests share the suspect module",
+      "weight": 0.05
+    }
+  ],
+  "auto_remediable": true,
+  "escalation_reason": null,
+  "decision": "PROPOSE_FIX_PENDING_APPROVAL",
+  "narrator": "rule-based"
+}

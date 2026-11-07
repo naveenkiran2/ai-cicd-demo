@@ -1,0 +1,12 @@
+{
+  "name": "success",
+  "title": "Healthy commit - all stages pass",
+  "description": "A documentation-only style change on a healthy baseline. Every stage passes and the AI bot explains the run and its release readiness.",
+  "commit": {"message": "DOCS-12: clarify pricing docstring", "author": "dev.alice", "branch": "feature/docs-pricing"},
+  "changes": [
+    {"file": "app/pricing.py",
+     "find": "\"\"\"Price an order: discount first, then tax on the discounted amount.\"\"\"",
+     "replace": "\"\"\"Price an order: discount first, then tax on the discounted amount (all values in USD).\"\"\""}
+  ],
+  "expected": {"status": "SUCCESS", "failed_stage": null}
+}

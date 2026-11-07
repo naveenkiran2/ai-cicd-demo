@@ -1,0 +1,4 @@
+2026-11-07T20:39:27.647Z [INFO] stage publish: write run metadata and the human-readable summary
+2026-11-07T20:39:27.648Z [INFO] published run.json
+2026-11-07T20:39:27.648Z [INFO] published summary.md
+2026-11-07T20:39:27.648Z [INFO] stage publish finished: PASS in 0.001s

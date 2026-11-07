@@ -1,0 +1,18 @@
+2026-11-07T20:39:26.893Z [INFO] stage checkout: snapshot the commit and verify interpreter + repository layout
+2026-11-07T20:39:26.893Z [INFO] checkout: repository baseline -> workspace
+2026-11-07T20:39:26.895Z [INFO] applied commit change to app/pricing.py
+2026-11-07T20:39:26.896Z [INFO] source tree digest: 37108b64f976
+2026-11-07T20:39:26.896Z [INFO] commit diff:
+    | --- a/app/pricing.py
+    | +++ b/app/pricing.py
+    | @@ -32,7 +32,7 @@
+    |  
+    |  
+    |  def calculate_total(subtotal, discount_pct=0, tax_rate_pct=0) -> dict:
+    | -    """Price an order: discount first, then tax on the discounted amount."""
+    | +    """Price an order: discount first, then tax on the discounted amount (all values in USD)."""
+    |      if Decimal(str(subtotal)) < 0:
+    |          raise ValueError("subtotal must be >= 0")
+    |      discount = apply_discount(subtotal, discount_pct)
+2026-11-07T20:39:26.896Z [INFO] python 3.13.18 on Linux x86_64
+2026-11-07T20:39:26.897Z [INFO] stage checkout finished: PASS in 0.004s

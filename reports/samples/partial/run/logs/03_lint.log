@@ -1,0 +1,5 @@
+2026-11-07T20:39:29.370Z [INFO] stage lint: static analysis, style rules and hard-coded secret scan
+2026-11-07T20:39:29.370Z [INFO] static checks: syntax, unused-import, bare-except, no-print, line-length, whitespace, secrets (max line 120)
+2026-11-07T20:39:29.379Z [INFO] 15 python files linted, 18 files secret-scanned
+2026-11-07T20:39:29.379Z [INFO] errors=0 warnings=0 secrets=0
+2026-11-07T20:39:29.379Z [INFO] stage lint finished: PASS in 0.009s

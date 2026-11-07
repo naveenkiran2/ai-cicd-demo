@@ -1,0 +1,37 @@
+[
+  {
+    "key": "integration",
+    "name": "Integration & deployment validation",
+    "order": 6,
+    "status": "PASS",
+    "summary": "6 passed",
+    "started_at": "2026-11-07T20:39:30.038Z",
+    "finished_at": "2026-11-07T20:39:30.377Z",
+    "duration_s": 0.339,
+    "log_file": "logs/06_integration.log",
+    "reports": [
+      "test-reports/junit-integration.xml",
+      "test-reports/integration-summary.json",
+      "logs/service.log"
+    ],
+    "metrics": {
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "test_time_s": 0.032,
+      "suites": [
+        "tests.integration.test_deployment_readiness",
+        "tests.integration.test_health_contract",
+        "tests.integration.test_order_api"
+      ],
+      "readiness_probe": {
+        "path": "/health",
+        "http_status": 200,
+        "passed": true
+      },
+      "environment": "staging"
+    },
+    "error": null
+  }
+]

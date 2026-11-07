@@ -1,0 +1,61 @@
+[
+  {
+    "key": "lint",
+    "name": "Lint, static & secret checks",
+    "order": 3,
+    "status": "PASS",
+    "summary": "15 files, 0 errors, 0 secrets",
+    "started_at": "2026-11-07T20:39:28.164Z",
+    "finished_at": "2026-11-07T20:39:28.171Z",
+    "duration_s": 0.007,
+    "log_file": "logs/03_lint.log",
+    "reports": [
+      "test-reports/lint.json"
+    ],
+    "metrics": {
+      "python_files": 15,
+      "files_secret_scanned": 18,
+      "errors": 0,
+      "warnings": 0,
+      "secret_findings": 0,
+      "checks": [
+        "syntax",
+        "unused-import",
+        "bare-except",
+        "no-print",
+        "line-length",
+        "whitespace",
+        "secrets"
+      ]
+    },
+    "error": null
+  },
+  {
+    "key": "unit_tests",
+    "name": "Unit tests",
+    "order": 4,
+    "status": "PASS",
+    "summary": "21 passed",
+    "started_at": "2026-11-07T20:39:28.171Z",
+    "finished_at": "2026-11-07T20:39:28.489Z",
+    "duration_s": 0.318,
+    "log_file": "logs/04_unit_tests.log",
+    "reports": [
+      "test-reports/junit-unit.xml",
+      "test-reports/unit-summary.json"
+    ],
+    "metrics": {
+      "tests": 21,
+      "passed": 21,
+      "failed": 0,
+      "skipped": 0,
+      "test_time_s": 0.037,
+      "suites": [
+        "tests.unit.test_config",
+        "tests.unit.test_orders",
+        "tests.unit.test_pricing"
+      ]
+    },
+    "error": null
+  }
+]

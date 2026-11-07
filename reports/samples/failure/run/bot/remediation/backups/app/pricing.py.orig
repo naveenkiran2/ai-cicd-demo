@@ -1,0 +1,46 @@
+"""Pricing rules for the order service.
+
+All money values are handled as Decimal and rounded half-up to cents.
+Percentages are expressed on a 0-100 scale (10 means 10%).
+"""
+from decimal import ROUND_HALF_UP, Decimal
+
+CENT = Decimal("0.01")
+HUNDRED = Decimal("100")
+
+
+def to_money(value) -> Decimal:
+    """Convert a number to a Decimal rounded to cents."""
+    return Decimal(str(value)).quantize(CENT, rounding=ROUND_HALF_UP)
+
+
+def apply_discount(subtotal, discount_pct) -> Decimal:
+    """Return the discount amount for a percentage discount (0-100)."""
+    subtotal = Decimal(str(subtotal))
+    discount_pct = Decimal(str(discount_pct))
+    if not Decimal("0") <= discount_pct <= HUNDRED:
+        raise ValueError(f"discount_pct must be between 0 and 100, got {discount_pct}")
+    return to_money(subtotal * discount_pct)
+
+
+def calculate_tax(taxable_amount, tax_rate_pct) -> Decimal:
+    """Return the tax owed on a taxable amount for a percentage rate."""
+    tax_rate_pct = Decimal(str(tax_rate_pct))
+    if tax_rate_pct < 0:
+        raise ValueError(f"tax_rate_pct must be >= 0, got {tax_rate_pct}")
+    return to_money(Decimal(str(taxable_amount)) * (tax_rate_pct / HUNDRED))
+
+
+def calculate_total(subtotal, discount_pct=0, tax_rate_pct=0) -> dict:
+    """Price an order: discount first, then tax on the discounted amount."""
+    if Decimal(str(subtotal)) < 0:
+        raise ValueError("subtotal must be >= 0")
+    discount = apply_discount(subtotal, discount_pct)
+    taxable = to_money(subtotal) - discount
+    tax = calculate_tax(taxable, tax_rate_pct)
+    return {
+        "subtotal": to_money(subtotal),
+        "discount": discount,
+        "tax": tax,
+        "total": to_money(taxable + tax),
+    }

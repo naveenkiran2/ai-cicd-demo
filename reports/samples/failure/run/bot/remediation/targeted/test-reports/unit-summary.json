@@ -1,0 +1,119 @@
+{
+  "totals": {
+    "tests": 21,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "time_s": 0.037,
+    "failed": 0,
+    "passed": 21
+  },
+  "failures": [],
+  "cases": [
+    {
+      "test": "tests.unit.test_config::test_valid_manifest_passes",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_config::test_invalid_values_rejected[port-80]",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_config::test_invalid_values_rejected[port-8080]",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_config::test_invalid_values_rejected[environment-production]",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_config::test_invalid_values_rejected[replicas-0]",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_config::test_missing_key_rejected",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_config::test_load_from_file",
+      "outcome": "passed",
+      "time_s": 0.002
+    },
+    {
+      "test": "tests.unit.test_orders::test_line_total",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_orders::test_quote_without_discount",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_orders::test_quote_with_discount",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_orders::test_empty_order_rejected",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_orders::test_invalid_quantity_rejected",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_orders::test_parse_items",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_pricing::test_to_money_rounds_half_up",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_pricing::test_no_discount_no_tax",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_pricing::test_ten_percent_discount_amount",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_pricing::test_ten_percent_discount_total",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_pricing::test_discount_then_tax",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_pricing::test_tax_only",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_pricing::test_discount_out_of_range_rejected",
+      "outcome": "passed",
+      "time_s": 0.0
+    },
+    {
+      "test": "tests.unit.test_pricing::test_negative_subtotal_rejected",
+      "outcome": "passed",
+      "time_s": 0.0
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+2026-11-07T20:39:27.759Z [INFO] stage checkout: snapshot the commit and verify interpreter + repository layout
+2026-11-07T20:39:27.759Z [INFO] checkout: repository baseline -> workspace
+2026-11-07T20:39:27.761Z [INFO] applied commit change to app/pricing.py
+2026-11-07T20:39:27.762Z [INFO] source tree digest: b46a02bfaab3
+2026-11-07T20:39:27.762Z [INFO] commit diff:
+    | --- a/app/pricing.py
+    | +++ b/app/pricing.py
+    | @@ -20,7 +20,7 @@
+    |      discount_pct = Decimal(str(discount_pct))
+    |      if not Decimal("0") <= discount_pct <= HUNDRED:
+    |          raise ValueError(f"discount_pct must be between 0 and 100, got {discount_pct}")
+    | -    return to_money(subtotal * (discount_pct / HUNDRED))
+    | +    return to_money(subtotal * discount_pct)
+    |  
+    |  
+    |  def calculate_tax(taxable_amount, tax_rate_pct) -> Decimal:
+2026-11-07T20:39:27.762Z [INFO] python 3.13.18 on Linux x86_64
+2026-11-07T20:39:27.762Z [INFO] stage checkout finished: PASS in 0.003s

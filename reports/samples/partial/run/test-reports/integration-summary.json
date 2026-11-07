@@ -1,0 +1,52 @@
+{
+  "totals": {
+    "tests": 6,
+    "failures": 1,
+    "errors": 0,
+    "skipped": 0,
+    "time_s": 0.041,
+    "failed": 1,
+    "passed": 5
+  },
+  "failures": [
+    {
+      "test": "tests.integration.test_deployment_readiness::test_readiness_probe_path_is_served",
+      "file": null,
+      "kind": "failure",
+      "message": "AssertionError: readiness probe GET /healthz returned HTTP 404\nassert 404 == 200",
+      "details": "service_url = 'http://127.0.0.1:32957'\ndeploy_config = {'service': 'order-service', 'environment': 'staging', 'port': 8080, 'health_path': '/healthz', ...}\ncall = <function http at 0x7f7f221559e0>\n\n    def test_readiness_probe_path_is_served(service_url, deploy_config, call):\n        path = deploy_config[\"health_path\"]\n        status, _ = call(\"GET\", f\"{service_url}{path}\")\n>       assert status == 200, f\"readiness probe GET {path} returned HTTP {status}\"\nE       AssertionError: readiness probe GET /healthz returned HTTP 404\nE       assert 404 == 200\n\ntests/integration/test_deployment_readiness.py:11: AssertionError"
+    }
+  ],
+  "cases": [
+    {
+      "test": "tests.integration.test_deployment_readiness::test_manifest_targets_this_service",
+      "outcome": "passed",
+      "time_s": 0.001
+    },
+    {
+      "test": "tests.integration.test_deployment_readiness::test_readiness_probe_path_is_served",
+      "outcome": "failed",
+      "time_s": 0.01
+    },
+    {
+      "test": "tests.integration.test_health_contract::test_health_contract_fields",
+      "outcome": "passed",
+      "time_s": 0.001
+    },
+    {
+      "test": "tests.integration.test_health_contract::test_unknown_route_returns_404",
+      "outcome": "passed",
+      "time_s": 0.001
+    },
+    {
+      "test": "tests.integration.test_order_api::test_quote_end_to_end",
+      "outcome": "passed",
+      "time_s": 0.001
+    },
+    {
+      "test": "tests.integration.test_order_api::test_invalid_order_returns_400",
+      "outcome": "passed",
+      "time_s": 0.001
+    }
+  ]
+}

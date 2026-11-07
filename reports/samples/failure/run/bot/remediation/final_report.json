@@ -1,0 +1,96 @@
+{
+  "run_id": "20261107-203927-failure",
+  "result_label": "RERUN PASSED",
+  "verified": true,
+  "title": "Percentage not normalised in apply_discount() (app/pricing.py:23)",
+  "playbook": "PB-001 percentage-scale-error",
+  "confidence": 0.95,
+  "approved_by": "demo.approver",
+  "finished_at": "2026-11-07T20:39:29.247Z",
+  "before": {
+    "status": "FAILED",
+    "outcome": "failure",
+    "failed_stage": "unit_tests"
+  },
+  "after": {
+    "status": "SUCCESS",
+    "outcome": "success",
+    "run_id": "20261107-203927-failure-rerun1"
+  },
+  "rerun_run_id": "20261107-203927-failure-rerun1",
+  "targeted_validation": [
+    {
+      "stage": "lint",
+      "status": "PASS",
+      "summary": "15 files, 0 errors, 0 secrets"
+    },
+    {
+      "stage": "unit_tests",
+      "status": "PASS",
+      "summary": "21 passed"
+    }
+  ],
+  "files_changed": [
+    {
+      "path": "app/pricing.py",
+      "line": 23,
+      "backup": "bot/remediation/backups/app/pricing.py.orig",
+      "sha256_before": "5390a7d26812cb3e2cd2418d30d88981a34698d7d930b202180a6f6d36349863",
+      "sha256_after": "e5985e44e5c64e75eed467dface5938d3556e60638c0d2773f3b693dd07c9168"
+    }
+  ],
+  "files_touched_then_restored": [],
+  "comparison": [
+    {
+      "key": "checkout",
+      "name": "Checkout & environment validation",
+      "before": "PASS",
+      "targeted": "",
+      "after": "PASS"
+    },
+    {
+      "key": "dependencies",
+      "name": "Dependency installation",
+      "before": "PASS",
+      "targeted": "",
+      "after": "PASS"
+    },
+    {
+      "key": "lint",
+      "name": "Lint, static & secret checks",
+      "before": "PASS",
+      "targeted": "PASS",
+      "after": "PASS"
+    },
+    {
+      "key": "unit_tests",
+      "name": "Unit tests",
+      "before": "FAIL",
+      "targeted": "PASS",
+      "after": "PASS"
+    },
+    {
+      "key": "package",
+      "name": "Build & package artifact",
+      "before": "SKIPPED",
+      "targeted": "",
+      "after": "PASS"
+    },
+    {
+      "key": "integration",
+      "name": "Integration & deployment validation",
+      "before": "SKIPPED",
+      "targeted": "",
+      "after": "PASS"
+    },
+    {
+      "key": "publish",
+      "name": "Publish pipeline report",
+      "before": "PASS",
+      "targeted": "",
+      "after": "PASS"
+    }
+  ],
+  "patch": "bot/remediation/patch.diff",
+  "audit_log": "bot/remediation/audit.jsonl"
+}

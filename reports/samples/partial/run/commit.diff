@@ -1,0 +1,11 @@
+--- a/config/deploy.json
++++ b/config/deploy.json
+@@ -2,7 +2,7 @@
+   "service": "order-service",
+   "environment": "staging",
+   "port": 8080,
+-  "health_path": "/health",
++  "health_path": "/healthz",
+   "replicas": 2,
+   "readiness_timeout_seconds": 5
+ }

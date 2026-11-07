@@ -1,0 +1,65 @@
+# Optional: the same pipeline and AI bot running on GitHub Actions.
+# The demo is fully local; nothing here needs secrets or cloud credentials.
+name: ai-cicd-demo
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pipeline:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.12"]
+    env:
+      NO_COLOR: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install test dependencies
+        run: pip install -r requirements.txt
+
+      - name: "Scenario 1: success pipeline"
+        run: python -m pipeline.run --scenario success
+      - name: "Scenario 1: AI release-readiness report"
+        run: python -m ai_bot.analyze --run-id latest-success
+
+      - name: "Scenario 2: failure pipeline (expected to fail)"
+        run: |
+          if python -m pipeline.run --scenario failure; then
+            echo "::error::failure scenario unexpectedly passed"; exit 1
+          fi
+      - name: "Scenario 2: AI diagnosis + approved self-healing"
+        # In real use approval comes from a human (PR review / ChatOps). Approving here
+        # only patches the run's sandboxed workspace, never the repository.
+        run: |
+          python -m ai_bot.analyze --run-id latest-failure
+          python -m ai_bot.remediate --run-id latest-failure --approve --approver github-actions-demo
+
+      - name: "Scenario 3: partial pipeline (expected to fail late)"
+        run: |
+          if python -m pipeline.run --scenario partial; then
+            echo "::error::partial scenario unexpectedly passed"; exit 1
+          fi
+      - name: "Scenario 3: AI diagnosis + targeted repair"
+        run: |
+          python -m ai_bot.analyze --run-id latest-partial
+          python -m ai_bot.remediate --run-id latest-partial --approve --approver github-actions-demo
+
+      - name: Upload run artifacts and AI reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-runs-py${{ matrix.python-version }}
+          path: |
+            artifacts/runs/**
+            !artifacts/runs/**/workspace/**
+            !artifacts/runs/**/staging/**

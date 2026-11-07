@@ -1,0 +1,11 @@
+--- a/app/pricing.py
++++ b/app/pricing.py
+@@ -20,7 +20,7 @@
+     discount_pct = Decimal(str(discount_pct))
+     if not Decimal("0") <= discount_pct <= HUNDRED:
+         raise ValueError(f"discount_pct must be between 0 and 100, got {discount_pct}")
+-    return to_money(subtotal * discount_pct)
++    return to_money(subtotal * (discount_pct / HUNDRED))
+ 
+ 
+ def calculate_tax(taxable_amount, tax_rate_pct) -> Decimal:

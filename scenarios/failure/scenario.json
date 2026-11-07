@@ -1,0 +1,12 @@
+{
+  "name": "failure",
+  "title": "Pricing regression - unit tests fail",
+  "description": "A 'simplification' of the discount formula drops the /100 percentage normalisation, so a 10% discount is applied as 10x. Unit tests fail and the pipeline stops before packaging.",
+  "commit": {"message": "PRICE-142: simplify discount calculation", "author": "dev.bob", "branch": "feature/price-142"},
+  "changes": [
+    {"file": "app/pricing.py",
+     "find": "return to_money(subtotal * (discount_pct / HUNDRED))",
+     "replace": "return to_money(subtotal * discount_pct)"}
+  ],
+  "expected": {"status": "FAILED", "failed_stage": "unit_tests"}
+}
